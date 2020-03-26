@@ -1,4 +1,4 @@
-# Credit agricole - Particuliers
+# Client Python pour la banque Crédit agricole - Particuliers
 
 Ce client Python est à destination des particuliers souhaitant récupérer ses opérations bancaires stockées par le Crédit Agricole.
 
