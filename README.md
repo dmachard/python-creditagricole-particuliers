@@ -59,3 +59,20 @@ operations = Operations(session=session,
 for op in operations:
     print(op)
 ```
+
+## Type opérations
+
+| Id | Type operation |
+|----|----------------|
+| 1 | Chèques émis |
+| 2 | Chèques reçus |
+| 3 | Traites émises |
+| 4 | Traites remises |
+| 5 | Prélèvements |
+| 6 | Virements réalisés |
+| 7 | Virements reçus |
+| 8 | Réalisation de prêt |
+| 9 | Retraits |
+| 10 | Opération titre |
+| 11 | Factures cartes |
+| 12 | Autres |
