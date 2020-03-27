@@ -4,14 +4,14 @@ import json
 from datetime import datetime
 
 class Operations:
-    def __init__(self, session, date_start, date_stop):
+    def __init__(self, session, date_start, date_stop, count=30):
         """operations class"""
         self.session = session
         self.date_start = date_start
         self.date_stop = date_stop
         self.list = []
         
-        self.get_operations()
+        self.get_operations(count=count)
         
     def __iter__(self):
         """iter"""
@@ -27,7 +27,7 @@ class Operations:
         else:
             raise StopIteration
             
-    def get_operations(self):
+    def get_operations(self, count):
         """get operations according to the date range"""
         # convert date to timestamp
         ts_date_debut = datetime.strptime(self.date_start, "%Y-%m-%d")
@@ -43,6 +43,7 @@ class Operations:
         url += "&idDevise=EUR"
         url += "&dateDebut=%s" % ts_date_debut
         url += "&dateFin=%s" % ts_date_fin
+        url += "&count=%s" % count
         r = requests.get(url=url,
                          verify=self.session.ssl_verify,
                          cookies=self.session.cookies)
