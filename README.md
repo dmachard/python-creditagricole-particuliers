@@ -84,7 +84,7 @@ for op in operations:
 ```python
 from creditagricole_particuliers import Accounts
 
-accounts = Actions(session=session)
+accounts = Accounts(session=session)
 print(accounts.list)
 [
     {
