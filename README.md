@@ -11,15 +11,17 @@ pip install creditagricole_particuliers
 ## Authentification
 
 ```python
-from creditagricole_particuliers import Authenticator, Operations
+from creditagricole_particuliers import Authenticator
 
 session = Authenticator(username="<n° de compte bancaire>",
                         password=[1, 2, 3, 4, 5, 6])
 ```
                 
-## Récupération des opérations bancaires
+## Récupération des opérations bancaires du compte courant
 
 ```python
+from creditagricole_particuliers import Operations
+
 operations = Operations(session=session,
                         date_start="2020-02-21",
                         date_stop="2020-02-21")
@@ -31,7 +33,7 @@ print(operations.list)
         'typeOperation': '11',
         'codeTypeOperation': '52',
         'familleTypeOperation': '11',
-        'libelleOperation': 'CARTE LEROY MERLIN',
+        'libelleOperation': 'xxxxxxxxxxxxxxxxxxxx',
         'libelleTypeOperation': 'PAIEMENT PAR CARTE',
         'montant': -3.75,
         'idDevise': 'EUR',
@@ -45,7 +47,7 @@ print(operations.list)
         'indexCarte': -1,
         'referenceClient': '', 
         'pictogrammeCSS': 'npc-card',
-        'fitid': '5799800129718'
+        'fitid': '579980012....'
     }
 ]
 ```
@@ -76,3 +78,43 @@ for op in operations:
 | 10 | Opération titre |
 | 11 | Factures cartes |
 | 12 | Autres |
+
+## Récupération de l'ensemble des comptes bancaires
+
+```python
+from creditagricole_particuliers import Accounts
+
+accounts = Operations(Accounts=session)
+print(accounts.list)
+[
+    {
+        'recipientOfTransfert': True, 
+        'senderOfTransfert': True, 
+        'accountNumber': 'xxxxxxxxxxxxxxxxxxxx', 
+        'domain': '50', 
+        'subAccountNumber': '00000000000', 
+        'productFamilyCode': '50', 
+        'bicCode': 'xxxxxxxxxxxxxxxxxxxx', 
+        'ibanCode': 'xxxxxxxxxxxxxxxxxxxx', 
+        'accountHolderShortDesignation': 'MADAME xxxxxxxxxx', 
+        'accountHolderLongDesignation': 'MADAME xxxxxxxxxx', 
+        'accountNature': 'PROFESSIONEL', 
+        'accountNatureShortLabel': 'TIWI', 
+        'accountNatureLongLabel': 'Livret Tiwi', 
+        'balanceValue': xxxxxxxxxx, 
+        'balanceSign': '+', 
+        'balanceDate': {'iMillis': xxxxxxxxxx, 'iChronology': {'iBase': {'iMinDaysInFirstWeek': 4}}}, 
+        'currencyCode': 'EUR', 
+        'categoryCode': '40',
+        'locked': False, 
+        'realTimeBalanceRestitution': True, 
+        'accountNumberRestitution': True,
+        'customerRoleOnAccount': 'ADMINISTRATEUR_LEGAL', 
+        'accountLiquidityLevelCode': '2', 
+        'accountPersonalizationRankCode': '99',
+        'rolePartenaireAffiche': 'Sous administration légale', 
+        'weather': 'SOLEIL',
+        'codeGdeFamilleProduit': '3'
+    }
+]
+```
