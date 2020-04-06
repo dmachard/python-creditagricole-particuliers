@@ -1,5 +1,7 @@
 # Client Python pour la banque Crédit agricole - Particuliers
 
+![](https://github.com/dmachard/creditagricole_particuliers/workflows/Publish%20to%20PyPI/badge.svg)
+
 Ce client Python est à destination des particuliers souhaitant récupérer ses opérations bancaires stockées par le Crédit Agricole.
 
 ## Installation
