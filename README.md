@@ -3,6 +3,7 @@
 ![](https://github.com/dmachard/creditagricole_particuliers/workflows/Publish%20to%20PyPI/badge.svg)
 
 Ce client Python est à destination des particuliers souhaitant récupérer ses opérations bancaires stockées par le Crédit Agricole.
+Une [procédure](https://gist.github.com/dmachard/9453bdb0c031a0042b1266fe23ccd732) de mise en oeuvre d'un dashboard Kibana permettant de suivre les opérations bancaires du crédit agricole est disponible sur GitHub Gist.
 
 ## Installation
 
