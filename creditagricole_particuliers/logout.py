@@ -9,7 +9,7 @@ class Logout:
     def logout(self):
         """logout from remote"""
         url += "%s" % self.session.url
-        url += "/ca-normandie/particulier.npc.logout.html?resource="
+        url += f"/ca-{self.session.region}/particulier.npc.logout.html?resource="
         url += "/content/ca/cr866/npc/fr/particulier.html"
         r = requests.get(url=url,
                          verify=self.session.ssl_verify,

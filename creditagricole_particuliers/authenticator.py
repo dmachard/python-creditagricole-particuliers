@@ -4,13 +4,14 @@ import requests
 import json
 
 class Authenticator:
-    def __init__(self, username, password):
+    def __init__(self, username, password, region):
         """authenticator class"""
         self.url = "https://www.credit-agricole.fr"
         self.ssl_verify = True
         self.username = username
         self.password = password
         self.cookies = None
+        self.region = region
         
         self.authenticate()
         
@@ -25,7 +26,7 @@ class Authenticator:
     def authenticate(self):
         """authenticate user"""
         # get the keypad layout for the password
-        url = "%s/ca-normandie/particulier/" % self.url
+        url = f"{self.url}/ca-{self.region}/particulier/"
         url += "acceder-a-mes-comptes.authenticationKeypad.json"
         r = requests.post(url=url,
                           verify=self.ssl_verify)
@@ -44,12 +45,12 @@ class Authenticator:
 
 
         # authenticate the user
-        url = "%s/ca-normandie/particulier/" % self.url
+        url = f"{self.url}/ca-{self.region}/particulier/"
         url += "acceder-a-mes-comptes.html/j_security_check"
         headers={'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         payload = {'j_password': ",".join(j_password),
                    'path': '/content/npc/start',
-                   'j_path_ressource': '%2Fca-normandie%2Fparticulier%2Foperations%2Fsynthese.html',
+                   'j_path_ressource': f'%2Fca-{self.region}%2Fparticulier%2Foperations%2Fsynthese.html',
                    'j_username': self.username,
                    'keypadId': rsp["keypadId"],
                    'j_validate': "true"}

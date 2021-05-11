@@ -4,14 +4,16 @@ import json
 from datetime import datetime
 
 class Operations:
-    def __init__(self, session, date_start, date_stop, count=30):
+    def __init__(self, session, date_start, date_stop, count=30, account_id=0):
         """operations class"""
         self.session = session
         self.date_start = date_start
         self.date_stop = date_stop
         self.list = []
+        self.count = count
+        self.account_id = account_id
         
-        self.get_operations(count=count)
+        self.get_operations()
         
     def __iter__(self):
         """iter"""
@@ -27,7 +29,9 @@ class Operations:
         else:
             raise StopIteration
             
-    def get_operations(self, count):
+    def get_operations(self, account_id=None, count=None):
+        count = count or self.count
+        account_id = account_id or self.account_id
         """get operations according to the date range"""
         # convert date to timestamp
         ts_date_debut = datetime.strptime(self.date_start, "%Y-%m-%d")
@@ -38,8 +42,8 @@ class Operations:
         
         # call operations ressources
         url = "%s" % self.session.url
-        url += "/ca-normandie/particulier/operations/synthese/detail-comptes/"
-        url += "jcr:content.n3.operations.json?grandeFamilleCode=1&compteIdx=0"
+        url += f"/ca-{self.session.region}/particulier/operations/synthese/detail-comptes/"
+        url += f"jcr:content.n3.operations.json?grandeFamilleCode=1&compteIdx={account_id}"
         url += "&idDevise=EUR"
         url += "&dateDebut=%s" % ts_date_debut
         url += "&dateFin=%s" % ts_date_fin
