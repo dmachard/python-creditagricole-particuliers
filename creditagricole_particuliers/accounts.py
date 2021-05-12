@@ -28,7 +28,7 @@ class Accounts:
         """get accounts"""
         # call operations ressources
         url = "%s" % self.session.url
-        url += "/ca-normandie/particulier/operations/"
+        url += "/ca-%s/particulier/operations/" % self.session.region
         url += "moyens-paiement/virement/jcr:content.accounts.json"
         r = requests.get(url=url,
                          verify=self.session.ssl_verify,

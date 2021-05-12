@@ -17,7 +17,8 @@ pip install creditagricole_particuliers
 from creditagricole_particuliers import Authenticator
 
 session = Authenticator(username="<n° de compte bancaire>",
-                        password=[1, 2, 3, 4, 5, 6])
+                        password=[1, 2, 3, 4, 5, 6],
+                        region="normandie")
 ```
                 
 ## Récupération des opérations bancaires du compte courant

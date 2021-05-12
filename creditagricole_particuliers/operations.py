@@ -38,7 +38,7 @@ class Operations:
         
         # call operations ressources
         url = "%s" % self.session.url
-        url += "/ca-normandie/particulier/operations/synthese/detail-comptes/"
+        url += "/ca-%s/particulier/operations/synthese/detail-comptes/" % self.session.region
         url += "jcr:content.n3.operations.json?grandeFamilleCode=1&compteIdx=0"
         url += "&idDevise=EUR"
         url += "&dateDebut=%s" % ts_date_debut
