@@ -50,7 +50,7 @@ class Authenticator:
         headers={'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         payload = {'j_password': ",".join(j_password),
                    'path': '/content/npc/start',
-                   'j_path_ressource': '%2Fca-%s%2Fparticulier%2Foperations%2Fsynthese.html' % self.region,
+                   'j_path_ressource': '%%2Fca-%s%%2Fparticulier%%2Foperations%%2Fsynthese.html' % self.region,
                    'j_username': self.username,
                    'keypadId': rsp["keypadId"],
                    'j_validate': "true"}
