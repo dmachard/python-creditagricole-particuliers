@@ -15,7 +15,8 @@ pip install creditagricole_particuliers
 ```python
 from creditagricole_particuliers import Authenticator
 
-session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], region="normandie")
+session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], 
+                        region="normandie")
 ```
 
 ## Lister l'ensemble des comptes bancaires
@@ -23,10 +24,19 @@ session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 
 ```python
 from creditagricole_particuliers import Authenticator, Accounts
 
-session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], region="normandie")
+session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], 
+                        region="normandie")
 accounts = Accounts(session=session)
 for acc in accounts:
     print(acc)
+```
+
+Output:
+
+```
+Compte[numero=xxxxxxxxxxx, produit=Compte de Dépôt]
+Compte[numero=xxxxxxxxxxx, produit=Livret A]
+Compte[numero=xxxxxxxxxxx, produit=Livret Tiwi]
 ```
 
 Format JSON:
@@ -41,7 +51,8 @@ print(accounts.as_json())
 ```python
 from creditagricole_particuliers import Authenticator, Accounts
 
-session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], region="normandie")
+session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6],
+                        region="normandie")
 account = Accounts(session=session).search(num="<n° de compte bancaire>")
 print(account)
 ```
@@ -59,7 +70,8 @@ print(account.as_json())
 ```python
 from creditagricole_particuliers import Authenticator, Accounts
 
-session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], region="normandie")
+session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6],
+                        region="normandie")
 account = Accounts(session=session).search(num="<n° de compte bancaire>")
 print(account.get_solde())
 ```
@@ -74,7 +86,6 @@ solde = Accounts(session=session).get_solde()
 print(solde)
 ```
 
-
 ## Récupération des opérations bancaires
 
 Exemple pour récupérer les 30 dernières opérations
@@ -83,7 +94,8 @@ Exemple pour récupérer les 30 dernières opérations
 from creditagricole_particuliers import Authenticator, Accounts
 
 # make auth
-session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], region="normandie")
+session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6],
+                        region="normandie")
 
 # search account
 account = Accounts(session=session).search(num="<n° de compte bancaire>")
@@ -93,6 +105,15 @@ operations = account.operations(count=30)
 for op in operations:
     print(operations)
 ```
+
+Output:
+
+```
+Operation[date=Dec 31, 2020 12:00:00 AM, libellé=DE L'ANNEE TAUX  0,500%, montant=0.00]
+Operation[date=Dec 31, 2020 12:00:00 AM, libellé=DE L'ANNEE TAUX  0,750%, montant=0.00]
+
+```
+
 
 Format JSON et filtrage par date
 
