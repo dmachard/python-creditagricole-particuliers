@@ -3,7 +3,6 @@
 ![](https://github.com/dmachard/creditagricole_particuliers/workflows/Publish%20to%20PyPI/badge.svg)
 
 Ce client Python est à destination des particuliers souhaitant récupérer ses opérations bancaires stockées par le Crédit Agricole.
-Une [procédure](https://gist.github.com/dmachard/9453bdb0c031a0042b1266fe23ccd732) de mise en oeuvre d'un dashboard Kibana permettant de suivre les opérations bancaires du crédit agricole est disponible sur GitHub Gist.
 
 ## Installation
 
@@ -16,109 +15,89 @@ pip install creditagricole_particuliers
 ```python
 from creditagricole_particuliers import Authenticator
 
-session = Authenticator(username="<n° de compte bancaire>",
-                        password=[1, 2, 3, 4, 5, 6],
-                        region="normandie")
+session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], region="normandie")
 ```
-                
-## Récupération des opérations bancaires du compte courant
+
+## Lister l'ensemble des comptes bancaires
 
 ```python
-from creditagricole_particuliers import Operations
+from creditagricole_particuliers import Authenticator, Accounts
 
-operations = Operations(session=session,
-                        date_start="2020-02-21",
-                        date_stop="2020-02-21")
-print(operations.list)
-[ 
-    { 
-        'dateOperation': 'Feb 21, 2020 12:00:00 AM',
-        'dateValeur': 'Feb 21, 2020 12:00:00 AM',
-        'typeOperation': '11',
-        'codeTypeOperation': '52',
-        'familleTypeOperation': '11',
-        'libelleOperation': 'xxxxxxxxxxxxxxxxxxxx',
-        'libelleTypeOperation': 'PAIEMENT PAR CARTE',
-        'montant': -3.75,
-        'idDevise': 'EUR',
-        'libelleDevise': '€',
-        'libelleComplementaire': '', 
-        'referenceMandat': '',
-        'idCreancier': '', 
-        'libelleCash1': '',
-        'libelleCash2': '', 
-        'idCarte': '',
-        'indexCarte': -1,
-        'referenceClient': '', 
-        'pictogrammeCSS': 'npc-card',
-        'fitid': '579980012....'
-    }
-]
+session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], region="normandie")
+accounts = Accounts(session=session)
+for acc in accounts:
+    print(acc)
 ```
 
-## Itérer sur les opérations bancaires
+Format JSON:
 
 ```python
-operations = Operations(session=session,
-                        date_start="2020-02-21",
-                        date_stop="2020-02-21")
-for op in operations:
-    print(op)
+accounts = Accounts(session=session)
+print(accounts.as_json())
 ```
 
-## Type opérations
+## Rechercher un compte bancaire
 
-| Id | Type operation |
-|----|----------------|
-| 1 | Chèques émis |
-| 2 | Chèques reçus |
-| 3 | Traites émises |
-| 4 | Traites remises |
-| 5 | Prélèvements |
-| 6 | Virements réalisés |
-| 7 | Virements reçus |
-| 8 | Réalisation de prêt |
-| 9 | Retraits |
-| 10 | Opération titre |
-| 11 | Factures cartes |
-| 12 | Autres |
+```python
+from creditagricole_particuliers import Authenticator, Accounts
 
-## Récupération de l'ensemble des comptes bancaires
+session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], region="normandie")
+account = Accounts(session=session).search(num="<n° de compte bancaire>")
+print(account)
+```
+
+Format JSON:
+
+```python
+account = Accounts(session=session).search(num="<n° de compte bancaire>")
+print(account.as_json())
+```
+
+## Récupération du solde d'un compte
+
+
+```python
+from creditagricole_particuliers import Authenticator, Accounts
+
+session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], region="normandie")
+account = Accounts(session=session).search(num="<n° de compte bancaire>")
+print(account.get_solde())
+```
+
+exemple pour la totalité des comptes
+
 
 ```python
 from creditagricole_particuliers import Accounts
 
-accounts = Accounts(session=session)
-print(accounts.list)
-[
-    {
-        'recipientOfTransfert': True, 
-        'senderOfTransfert': True, 
-        'accountNumber': 'xxxxxxxxxxxxxxxxxxxx', 
-        'domain': '50', 
-        'subAccountNumber': '00000000000', 
-        'productFamilyCode': '50', 
-        'bicCode': 'xxxxxxxxxxxxxxxxxxxx', 
-        'ibanCode': 'xxxxxxxxxxxxxxxxxxxx', 
-        'accountHolderShortDesignation': 'MADAME xxxxxxxxxx', 
-        'accountHolderLongDesignation': 'MADAME xxxxxxxxxx', 
-        'accountNature': 'PROFESSIONEL', 
-        'accountNatureShortLabel': 'TIWI', 
-        'accountNatureLongLabel': 'Livret Tiwi', 
-        'balanceValue': xxxxxxxxxx, 
-        'balanceSign': '+', 
-        'balanceDate': {'iMillis': xxxxxxxxxx, 'iChronology': {'iBase': {'iMinDaysInFirstWeek': 4}}}, 
-        'currencyCode': 'EUR', 
-        'categoryCode': '40',
-        'locked': False, 
-        'realTimeBalanceRestitution': True, 
-        'accountNumberRestitution': True,
-        'customerRoleOnAccount': 'ADMINISTRATEUR_LEGAL', 
-        'accountLiquidityLevelCode': '2', 
-        'accountPersonalizationRankCode': '99',
-        'rolePartenaireAffiche': 'Sous administration légale', 
-        'weather': 'SOLEIL',
-        'codeGdeFamilleProduit': '3'
-    }
-]
+solde = Accounts(session=session).get_solde()
+print(solde)
+```
+
+
+## Récupération des opérations bancaires
+
+Exemple pour récupérer les 30 dernières opérations
+
+```python
+from creditagricole_particuliers import Authenticator, Accounts
+
+# make auth
+session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], region="normandie")
+
+# search account
+account = Accounts(session=session).search(num="<n° de compte bancaire>")
+
+# get operations
+operations = account.operations(count=30)
+for op in operations:
+    print(operations)
+```
+
+Format JSON et filtrage par date
+
+```python
+account = Accounts(session=session).search(num="<n° de compte bancaire>")
+operations = account.operations(date_start="2021-06-15", date_stop="2021-06-30", count=30)
+print(operations.as_json())
 ```
