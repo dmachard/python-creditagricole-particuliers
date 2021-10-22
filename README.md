@@ -101,7 +101,7 @@ session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 
 account = Accounts(session=session).search(num="<n° de compte bancaire>")
 
 # get operations
-operations = account.operations(count=30)
+operations = account.get_operations(count=30)
 for op in operations:
     print(operations)
 ```
@@ -119,6 +119,6 @@ Format JSON et filtrage par date
 
 ```python
 account = Accounts(session=session).search(num="<n° de compte bancaire>")
-operations = account.operations(date_start="2021-06-15", date_stop="2021-06-30", count=30)
+operations = account.get_operations(date_start="2021-06-15", date_stop="2021-06-30", count=30)
 print(operations.as_json())
 ```
