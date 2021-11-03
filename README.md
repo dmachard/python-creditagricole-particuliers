@@ -103,7 +103,7 @@ account = Accounts(session=session).search(num="<n° de compte bancaire>")
 # get operations
 operations = account.get_operations(count=30)
 for op in operations:
-    print(operations)
+    print(op)
 ```
 
 Output:
