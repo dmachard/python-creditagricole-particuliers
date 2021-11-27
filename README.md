@@ -70,7 +70,8 @@ print(account.as_json())
 ```python
 from creditagricole_particuliers import Authenticator, Accounts
 
-session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6],
+session = Authenticator(username="<n° de compte bancaire>",
+                        password=[1, 2, 3, 4, 5, 6],
                         region="normandie")
 account = Accounts(session=session).search(num="<n° de compte bancaire>")
 print(account.get_solde())
@@ -94,7 +95,8 @@ Exemple pour récupérer les 30 dernières opérations
 from creditagricole_particuliers import Authenticator, Accounts
 
 # make auth
-session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6],
+session = Authenticator(username="<n° de compte bancaire>",
+                        password=[1, 2, 3, 4, 5, 6],
                         region="normandie")
 
 # search account
@@ -121,4 +123,31 @@ Format JSON et filtrage par date
 account = Accounts(session=session).search(num="<n° de compte bancaire>")
 operations = account.get_operations(date_start="2021-06-15", date_stop="2021-06-30", count=30)
 print(operations.as_json())
+```
+
+## Lister les cartes bancaires
+
+```python
+from creditagricole_particuliers import Authenticator, Cards
+
+session = Authenticator(username="<n° de compte bancaire>",
+                        password=[1, 2, 3, 4, 5, 6], 
+                        region="normandie")
+cards = Cards(session=session)
+for cb in cards:
+    print(cb)
+```
+
+Output:
+
+```bash
+Carte[compte=xxxxxxxxxx, type=MCD, titulaire=xxxxxxxxxxx]
+Carte[compte=xxxxxxxxxx, type=Mastercard sans contact débit immédiat, titulaire=xxxxxxxxxxxxx]
+```
+
+Format JSON:
+
+```python
+cards = Cards(session=session)
+print(cards.as_json())
 ```
