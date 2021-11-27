@@ -151,3 +151,29 @@ Format JSON:
 cards = Cards(session=session)
 print(cards.as_json())
 ```
+
+## Récupération du code IBAN d'un compte
+
+```python
+from creditagricole_particuliers import Authenticator, Cards
+
+session = Authenticator(username="<n° de compte bancaire>",
+                        password=[1, 2, 3, 4, 5, 6], 
+                        region="normandie")
+account = Accounts(session=session).search(num="xxxxxxxxxx")
+print(account.get_iban())
+```
+
+Output:
+
+```bash
+Iban[code=FRxxxxxxxxxxxxxxxxxxxxxxxx]
+```
+
+Format JSON:
+
+```python
+account = Accounts(session=session).search(num="xxxxxxxxxx")
+iban = account.get_iban()
+print(iban.as_json())
+```

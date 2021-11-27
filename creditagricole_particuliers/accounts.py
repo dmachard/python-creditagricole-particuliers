@@ -4,6 +4,7 @@ import json
 from datetime import datetime, timedelta
 
 from creditagricole_particuliers import operations
+from creditagricole_particuliers import iban
 
 FAMILLE_PRODUITS = [
      {"code": 1, "familleProduit": "COMPTES"}, 
@@ -12,18 +13,22 @@ FAMILLE_PRODUITS = [
 ]
 
 class Account:
-    def __init__(self, session, descr):
+    def __init__(self, session, account):
         """account class"""
         self.session = session
-        self.descr = descr
-        self.numeroCompte = descr["numeroCompte"]
-        self.compteIdx = descr["index"]
-        self.grandeFamilleCode = descr["grandeFamilleProduitCode"]
+        self.account = account
+        self.numeroCompte = account["numeroCompte"]
+        self.compteIdx = account["index"]
+        self.grandeFamilleCode = account["grandeFamilleProduitCode"]
 
     def __str__(self):
         """str"""
-        return f"Compte[numero={self.numeroCompte}, produit={self.descr['libelleProduit']}]"
+        return f"Compte[numero={self.numeroCompte}, produit={self.account['libelleProduit']}]"
  
+    def get_iban(self):
+        """get iban"""
+        return iban.Iban(session=self.session, compteIdx=self.compteIdx, grandeFamilleCode=self.grandeFamilleCode)
+
     def get_operations(self, date_start=None, date_stop=None, count=100):
         """get operations"""
         if date_stop is None:
@@ -36,19 +41,19 @@ class Account:
 
     def as_json(self):
         """return as json"""
-        return json.dumps(self.descr)
+        return json.dumps(self.account)
 
     def get_solde(self):
         """get solde"""
-        if "montantEpargne" in self.descr:
-            return self.descr["montantEpargne"]
-        return self.descr["solde"]
+        if "montantEpargne" in self.account:
+            return self.account["montantEpargne"]
+        return self.account["solde"]
 
 class Accounts:
     def __init__(self, session):
         """operations class"""
         self.session = session
-        self.list = []
+        self.accounts_list = []
         
         self.get_accounts_per_products()
 
@@ -59,8 +64,8 @@ class Accounts:
         
     def __next__(self):
         """next"""
-        if self.n < len(self.list):
-            op = self.list[self.n]
+        if self.n < len(self.accounts_list):
+            op = self.accounts_list[self.n]
             self.n += 1
             return op
         else:
@@ -68,7 +73,7 @@ class Accounts:
 
     def search(self, num):
         """search account according to the num"""
-        for acc in self.list:
+        for acc in self.accounts_list:
             if acc.numeroCompte == num:
                 return acc
         raise Exception( "[error] account not found" )
@@ -76,7 +81,7 @@ class Accounts:
     def as_json(self):
         """as json"""
         _accs = []
-        for acc in self.list:
+        for acc in self.accounts_list:
             _accs.append(acc.descr)
         return json.dumps(_accs)
 
@@ -94,11 +99,11 @@ class Accounts:
                 raise Exception( "[error] get accounts: %s - %s" % (r.status_code, r.text) )
 
             for descr in json.loads(r.text):
-                self.list.append( Account(self.session, descr) )
+                self.accounts_list.append( Account(self.session, descr) )
 
     def get_solde(self):
         """get global solde"""
         solde = 0
-        for acc in self.list:
+        for acc in self.accounts_list:
             solde += acc.get_solde()
         return round(solde, 2)
