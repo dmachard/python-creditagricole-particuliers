@@ -155,7 +155,7 @@ print(cards.as_json())
 ## Récupération du code IBAN d'un compte
 
 ```python
-from creditagricole_particuliers import Authenticator, Cards
+from creditagricole_particuliers import Authenticator, Accounts
 
 session = Authenticator(username="<n° de compte bancaire>",
                         password=[1, 2, 3, 4, 5, 6], 
