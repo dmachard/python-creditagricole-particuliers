@@ -197,7 +197,7 @@ print(account.get_iban())
 Output:
 
 ```bash
-Iban[code=FRxxxxxxxxxxxxxxxxxxxxxxxx]
+Iban[compte=xxxxx, code=FRxxxxxxxxxxxxxxxxxxxxxxxx]
 ```
 
 Format JSON:
