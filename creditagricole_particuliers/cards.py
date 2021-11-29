@@ -28,7 +28,7 @@ class Card:
         return operations.DeferredOperations(session=self.session, 
                                              compteIdx=account.compteIdx,
                                              grandeFamilleCode=account.grandeFamilleCode,
-                                             carteIdx=self.card["index"])
+                                             carteIdx=self.card["index"]).list_operations
 
     def as_json(self):
         """return as json"""
