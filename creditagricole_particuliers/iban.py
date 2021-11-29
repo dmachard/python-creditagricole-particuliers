@@ -2,10 +2,11 @@ import json
 import requests
 
 class Iban:
-    def __init__(self, session, compteIdx, grandeFamilleCode):
+    def __init__(self, session, compteIdx, grandeFamilleCode, numeroCompte):
         """class init"""
         self.session = session
         self.compteIdx = compteIdx
+        self.numeroCompte = numeroCompte
         self.grandeFamilleCode = grandeFamilleCode
         self.iban = {}
         self.ibanCode = "-"
@@ -14,7 +15,7 @@ class Iban:
 
     def __str__(self):
         """stre representation"""
-        return f"Iban[code={self.ibanCode}]"
+        return f"Iban[compte={self.numeroCompte}, code={self.ibanCode}]"
 
     def get_iban_data(self):
         """get iban"""

@@ -27,7 +27,10 @@ class Account:
  
     def get_iban(self):
         """get iban"""
-        return iban.Iban(session=self.session, compteIdx=self.compteIdx, grandeFamilleCode=self.grandeFamilleCode)
+        return iban.Iban(session=self.session, 
+                         compteIdx=self.compteIdx,
+                         grandeFamilleCode=self.grandeFamilleCode
+                         numeroCompte=self.numeroCompte)
 
     def get_operations(self, date_start=None, date_stop=None, count=100):
         """get operations"""
