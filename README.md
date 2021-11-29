@@ -159,7 +159,7 @@ from creditagricole_particuliers import Authenticator, Cards
 
 session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6],
                         region="normandie")
-cb = Cards(session=session).search(num="<4 derniers chiffres de votre carte bancaire>")
+cb = Cards(session=session).search(num_last_digits="<4 derniers chiffres de votre carte bancaire>")
 print(cb)
 ```
 
@@ -174,7 +174,7 @@ session = Authenticator(username="<n° de compte bancaire>",
                         region="normandie")
 
 # search account
-cb = Cards(session=session).search(num="<4 derniers chiffres de votre carte bancaire>")
+cb = Cards(session=session).search(num_last_digits="<4 derniers chiffres de votre carte bancaire>")
 
 # get operations
 operations = cb.get_operations()
