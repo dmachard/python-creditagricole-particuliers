@@ -1,5 +1,8 @@
+from json.encoder import py_encode_basestring_ascii
 import requests
 import json
+
+from creditagricole_particuliers import operations
 
 class Card:
     def __init__(self, session, card):
@@ -14,6 +17,13 @@ class Card:
     def __str__(self):
         """str"""
         return f"Carte[compte={self.idCompte}, type={self.typeCarte}, titulaire={self.titulaire}]"
+
+    def get_operations(self):
+        """get deferred operations"""
+        return operations.DeferredOperations(session=self.session, 
+                                             compteIdx=self.compteIdx,
+                                             grandeFamilleCode=self.grandeFamilleCode,
+                                             carteIdx=self.card["index"])
 
     def as_json(self):
         """return as json"""
@@ -47,6 +57,14 @@ class Cards:
         for acc in self.cards_list:
             _accs.append(acc.card)
         return json.dumps(_accs)
+
+    def search(self, num_last_digits):
+        """search card """
+        for cb in self.cards_list:
+            if cb.idCarte.endswith(num_last_digits):
+                return cb
+        raise Exception( "[error] card not found" )
+
 
     def get_cards_per_account(self):
         """get cards per account"""

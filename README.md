@@ -152,6 +152,36 @@ cards = Cards(session=session)
 print(cards.as_json())
 ```
 
+## Rechercher une carte bancaire
+
+```python
+from creditagricole_particuliers import Authenticator, Cards
+
+session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6],
+                        region="normandie")
+cb = Cards(session=session).search(num="<4 derniers chiffres de votre carte bancaire>")
+print(cb)
+```
+
+## Récupération des opérations pour une carte bancaire à débit différé
+
+```python
+from creditagricole_particuliers import Authenticator, Cards
+
+# make auth
+session = Authenticator(username="<n° de compte bancaire>",
+                        password=[1, 2, 3, 4, 5, 6],
+                        region="normandie")
+
+# search account
+cb = Cards(session=session).search(num="<4 derniers chiffres de votre carte bancaire>")
+
+# get operations
+operations = cb.get_operations()
+for op in operations:
+    print(op)
+```
+
 ## Récupération du code IBAN d'un compte
 
 ```python
