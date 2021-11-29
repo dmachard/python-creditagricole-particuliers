@@ -23,7 +23,7 @@ class DeferredOperations:
     def __init__(self, session, compteIdx, grandeFamilleCode, carteIdx):
         """deferred card operations"""
         self.session = session
-        self.compteIdx = compteIdx,
+        self.compteIdx = compteIdx
         self.grandeFamilleCode = grandeFamilleCode
         self.carteIdx = carteIdx
         self.list_operations = []
