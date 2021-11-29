@@ -3,6 +3,7 @@ import requests
 import json
 
 from creditagricole_particuliers import operations
+from creditagricole_particuliers import accounts
 
 class Card:
     def __init__(self, session, card):
@@ -20,9 +21,13 @@ class Card:
 
     def get_operations(self):
         """get deferred operations"""
+        # search account
+        account = accounts.Accounts(session=self.session).search(num=self.idCompte)
+
+        # return associated operations
         return operations.DeferredOperations(session=self.session, 
-                                             compteIdx=self.compteIdx,
-                                             grandeFamilleCode=self.grandeFamilleCode,
+                                             compteIdx=account.compteIdx,
+                                             grandeFamilleCode=account.grandeFamilleCode,
                                              carteIdx=self.card["index"])
 
     def as_json(self):
