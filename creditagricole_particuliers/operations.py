@@ -30,6 +30,27 @@ class DeferredOperations:
 
         self.get_operations()
 
+    def __iter__(self):
+        """iter"""
+        self.n = 0
+        return self
+        
+    def __next__(self):
+        """next"""
+        if self.n < len(self.list_operations):
+            op = self.list_operations[self.n]
+            self.n += 1
+            return op
+        else:
+            raise StopIteration
+
+    def as_json(self):
+        """as json"""
+        _ops = []
+        for o in self.list_operations:
+            _ops.append(o.descr)
+        return json.dumps(_ops)
+        
     def get_operations(self):
         """get operations"""
         # call operations

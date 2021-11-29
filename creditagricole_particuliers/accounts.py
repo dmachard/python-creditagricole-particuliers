@@ -39,8 +39,12 @@ class Account:
             previous_date = current_date - timedelta(days=30)
             date_stop = current_date.strftime('%Y-%m-%d')
             date_start = previous_date.strftime('%Y-%m-%d')
-        return operations.Operations(session=self.session, compteIdx=self.compteIdx, grandeFamilleCode=self.grandeFamilleCode,
-                          date_start=date_start, date_stop=date_stop, count=count)
+            
+        return operations.Operations(session=self.session, 
+                                     compteIdx=self.compteIdx,
+                                     grandeFamilleCode=self.grandeFamilleCode,
+                                     date_start=date_start,
+                                     date_stop=date_stop, count=count)
 
     def as_json(self):
         """return as json"""
