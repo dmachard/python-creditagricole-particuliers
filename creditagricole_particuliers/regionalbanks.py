@@ -8,7 +8,7 @@ class RegionalBanks:
         self.url = "https://www.credit-agricole.fr"
         self.ssl_verify = True
 
-    def get_by_departement(self, department):
+    def by_departement(self, department):
         url = "%s/particulier/acces-cr.get-cr-by-department.json" % (self.url)
         headers={'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         payload = {'department': "%s" % department}

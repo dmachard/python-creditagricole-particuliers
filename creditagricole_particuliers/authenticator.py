@@ -21,9 +21,9 @@ class Authenticator:
         
     def find_regional_bank(self):
         """find regional bank"""
-        rb = regionalbanks.RegionalBanks()
-        regional_bank = rb.get_by_departement(department=self.department)
-        # keep only the name, remove backslash
+        regional_bank = regionalbanks.RegionalBanks().by_departement(department=self.department)
+        if "regionalBankUrlPrefix" not in regional_bank:
+            raise Exception( "[error] regionalBankUrlPrefix key is missing" )
         self.regional_bank_url = regional_bank["regionalBankUrlPrefix"][1:-1]
 
     def map_digit(self, key_layout, digit):
