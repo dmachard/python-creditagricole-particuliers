@@ -10,6 +10,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10' 
 
     - name: Install dependencies
       run: |
@@ -17,7 +19,7 @@ jobs:
         pip install twine jinja2
 
     - id: pkg_version
-      run: echo "##[set-output name=data;]$(echo ${{ github.event.release.tag_name }} | cut -c2-)"
+      run: echo "data=$(echo ${{ github.event.release.tag_name }} | cut -c2-)" >> $GITHUB_OUTPUT
 
     - name: Build Python package
       run: |
