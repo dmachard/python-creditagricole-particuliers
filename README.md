@@ -12,20 +12,24 @@ pip install creditagricole_particuliers
   
 ## Authentification
 
+Paramètres pour l'authentification:
+- `username` (string): votre numéro de compte bancaire 
+- `password` (list of integer): votre mot de passe
+- `department` (integer): numéro de département de votre caisse régionale
+
 ```python
 from creditagricole_particuliers import Authenticator
 
-session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], 
-                        region="normandie")
+session = Authenticator(username="01234567890", 
+                        password=[1, 2, 3, 4, 5, 6], 
+                        department=999)
 ```
 
 ## Lister l'ensemble des comptes bancaires
 
 ```python
-from creditagricole_particuliers import Authenticator, Accounts
+from creditagricole_particuliers import Accounts
 
-session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6], 
-                        region="normandie")
 accounts = Accounts(session=session)
 for acc in accounts:
     print(acc)
@@ -49,10 +53,8 @@ print(accounts.as_json())
 ## Rechercher un compte bancaire
 
 ```python
-from creditagricole_particuliers import Authenticator, Accounts
+from creditagricole_particuliers import Accounts
 
-session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6],
-                        region="normandie")
 account = Accounts(session=session).search(num="<n° de compte bancaire>")
 print(account)
 ```
@@ -68,11 +70,8 @@ print(account.as_json())
 
 
 ```python
-from creditagricole_particuliers import Authenticator, Accounts
+from creditagricole_particuliers import Accounts
 
-session = Authenticator(username="<n° de compte bancaire>",
-                        password=[1, 2, 3, 4, 5, 6],
-                        region="normandie")
 account = Accounts(session=session).search(num="<n° de compte bancaire>")
 print(account.get_solde())
 ```
@@ -92,12 +91,7 @@ print(solde)
 Exemple pour récupérer les 30 dernières opérations
 
 ```python
-from creditagricole_particuliers import Authenticator, Accounts
-
-# make auth
-session = Authenticator(username="<n° de compte bancaire>",
-                        password=[1, 2, 3, 4, 5, 6],
-                        region="normandie")
+from creditagricole_particuliers import Accounts
 
 # search account
 account = Accounts(session=session).search(num="<n° de compte bancaire>")
@@ -128,11 +122,8 @@ print(operations.as_json())
 ## Lister les cartes bancaires
 
 ```python
-from creditagricole_particuliers import Authenticator, Cards
+from creditagricole_particuliers Cards
 
-session = Authenticator(username="<n° de compte bancaire>",
-                        password=[1, 2, 3, 4, 5, 6], 
-                        region="normandie")
 cards = Cards(session=session)
 for cb in cards:
     print(cb)
@@ -155,10 +146,8 @@ print(cards.as_json())
 ## Rechercher une carte bancaire
 
 ```python
-from creditagricole_particuliers import Authenticator, Cards
+from creditagricole_particuliers import Cards
 
-session = Authenticator(username="<n° de compte bancaire>", password=[1, 2, 3, 4, 5, 6],
-                        region="normandie")
 cb = Cards(session=session).search(num_last_digits="<4 derniers chiffres de votre carte bancaire>")
 print(cb)
 ```
@@ -166,12 +155,7 @@ print(cb)
 ## Récupération des opérations pour une carte bancaire à débit différé
 
 ```python
-from creditagricole_particuliers import Authenticator, Cards
-
-# make auth
-session = Authenticator(username="<n° de compte bancaire>",
-                        password=[1, 2, 3, 4, 5, 6],
-                        region="normandie")
+from creditagricole_particuliers import Cards
 
 # search account
 cb = Cards(session=session).search(num_last_digits="<4 derniers chiffres de votre carte bancaire>")
@@ -185,11 +169,8 @@ for op in operations:
 ## Récupération du code IBAN d'un compte
 
 ```python
-from creditagricole_particuliers import Authenticator, Accounts
+from creditagricole_particuliers import Accounts
 
-session = Authenticator(username="<n° de compte bancaire>",
-                        password=[1, 2, 3, 4, 5, 6], 
-                        region="normandie")
 account = Accounts(session=session).search(num="xxxxxxxxxx")
 print(account.get_iban())
 ```

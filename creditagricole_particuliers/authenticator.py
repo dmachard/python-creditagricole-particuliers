@@ -3,18 +3,29 @@ from urllib import parse
 import requests
 import json
 
+from creditagricole_particuliers import regionalbanks
+
 class Authenticator:
-    def __init__(self, username, password, region):
+    def __init__(self, username, password, department):
         """authenticator class"""
         self.url = "https://www.credit-agricole.fr"
         self.ssl_verify = True
         self.username = username
         self.password = password
-        self.region = region
+        self.department = department
+        self.regional_bank_url = "ca-undefined"
         self.cookies = None
         
+        self.find_regional_bank()
         self.authenticate()
         
+    def find_regional_bank(self):
+        """find regional bank"""
+        rb = regionalbanks.RegionalBanks()
+        regional_bank = rb.get_by_departement(department=self.department)
+        # keep only the name, remove backslash
+        self.regional_bank_url = regional_bank["regionalBankUrlPrefix"][1:-1]
+
     def map_digit(self, key_layout, digit):
         """map digit with key layout"""
         i = 0
@@ -26,7 +37,7 @@ class Authenticator:
     def authenticate(self):
         """authenticate user"""
         # get the keypad layout for the password
-        url = "%s/ca-%s/particulier/" % (self.url, self.region)
+        url = "%s/%s/particulier/" % (self.url, self.regional_bank_url)
         url += "acceder-a-mes-comptes.authenticationKeypad.json"
         r = requests.post(url=url,
                           verify=self.ssl_verify)
@@ -45,12 +56,12 @@ class Authenticator:
 
 
         # authenticate the user
-        url = "%s/ca-%s/particulier/" % (self.url, self.region)
+        url = "%s/%s/particulier/" % (self.url, self.regional_bank_url)
         url += "acceder-a-mes-comptes.html/j_security_check"
         headers={'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         payload = {'j_password': ",".join(j_password),
                    'path': '/content/npc/start',
-                   'j_path_ressource': '%%2Fca-%s%%2Fparticulier%%2Foperations%%2Fsynthese.html' % self.region,
+                   'j_path_ressource': '%%2F%s%%2Fparticulier%%2Foperations%%2Fsynthese.html' % self.regional_bank_url,
                    'j_username': self.username,
                    'keypadId': rsp["keypadId"],
                    'j_validate': "true"}

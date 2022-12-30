@@ -20,7 +20,7 @@ class Iban:
     def get_iban_data(self):
         """get iban"""
         url = "%s" % self.session.url
-        url += "/ca-%s/particulier/operations/" % self.session.region
+        url += "/%s/particulier/operations/" % self.session.regional_bank_url
         url += "operations-courantes/editer-rib/"
         url += "jcr:content.ibaninformation.json?compteIdx=%s&grandeFamilleCode=%s" % (self.compteIdx,self.grandeFamilleCode)
 

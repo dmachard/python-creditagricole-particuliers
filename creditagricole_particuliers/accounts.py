@@ -97,7 +97,7 @@ class Accounts:
         for f in FAMILLE_PRODUITS:
             # call operations ressources
             url = "%s" % self.session.url
-            url += "/ca-%s/particulier/operations/" % self.session.region
+            url += "/%s/particulier/operations/" % self.session.regional_bank_url
             url += "synthese/jcr:content.produits-valorisation.json/%s" % f["code"]
             r = requests.get(url=url,
                             verify=self.session.ssl_verify,

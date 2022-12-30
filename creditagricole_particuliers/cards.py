@@ -74,7 +74,7 @@ class Cards:
     def get_cards_per_account(self):
         """get cards per account"""
         url = "%s" % self.session.url
-        url += "/ca-%s/particulier/operations/" % self.session.region
+        url += "/%s/particulier/operations/" % self.session.regional_bank_url
         url += "moyens-paiement/gestion-carte-v2/mes-cartes/jcr:content.listeCartesParCompte.json"
         r = requests.get(url=url,
                          verify=self.session.ssl_verify,

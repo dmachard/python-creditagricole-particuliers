@@ -55,7 +55,7 @@ class DeferredOperations:
         """get operations"""
         # call operations
         url = "%s" % self.session.url
-        url += "/ca-%s/particulier/operations/synthese/detail-comptes/" % self.session.region
+        url += "/%s/particulier/operations/synthese/detail-comptes/" % self.session.regional_bank_url
         url += "jcr:content.n3.operations.encours.carte.debit.differe.json"
         url += "?grandeFamilleCode=%s&compteIdx=%s&carteIdx=%s" % (self.grandeFamilleCode, self.compteIdx, self.carteIdx)
         r = requests.get(url=url, verify=self.session.ssl_verify, cookies=self.session.cookies)
@@ -110,7 +110,7 @@ class Operations:
         
         # call operations ressources
         url = "%s" % self.session.url
-        url += "/ca-%s/particulier/operations/synthese/detail-comptes/" % self.session.region
+        url += "/%s/particulier/operations/synthese/detail-comptes/" % self.session.regional_bank_url
         url += "jcr:content.n3.operations.json?grandeFamilleCode=%s&compteIdx=%s" % (self.grandeFamilleCode, self.compteIdx)
         url += "&idDevise=EUR"
         url += "&dateDebut=%s" % ts_date_debut
