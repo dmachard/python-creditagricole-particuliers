@@ -114,3 +114,17 @@ class Accounts:
         for acc in self.accounts_list:
             solde += acc.get_solde()
         return round(solde, 2)
+
+    def get_solde_per_products(self):
+        """get solde per products"""
+        ret_soldes = {}
+        for f in FAMILLE_PRODUITS:
+            ret_soldes[f["familleProduit"]] = 0.0
+
+        for f in FAMILLE_PRODUITS:
+            for acc in self.accounts_list:
+                if int(acc.grandeFamilleCode) == f["code"]:
+                    ret_soldes[f["familleProduit"]] += acc.get_solde()
+            ret_soldes[f["familleProduit"]] = round(ret_soldes[f["familleProduit"]], 2)
+
+        return ret_soldes
