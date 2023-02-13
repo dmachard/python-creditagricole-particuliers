@@ -122,7 +122,7 @@ print(operations.as_json())
 ## Lister les cartes bancaires
 
 ```python
-from creditagricole_particuliers Cards
+from creditagricole_particuliers import Cards
 
 cards = Cards(session=session)
 for cb in cards:
