@@ -89,7 +89,7 @@ class Accounts:
         """as json"""
         _accs = []
         for acc in self.accounts_list:
-            _accs.append(acc.descr)
+            _accs.append(acc.account)
         return json.dumps(_accs)
 
     def get_accounts_per_products(self):
