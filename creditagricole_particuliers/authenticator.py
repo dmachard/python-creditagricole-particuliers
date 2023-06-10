@@ -25,7 +25,7 @@ class Authenticator:
         with open("aliases.json", "r") as f :
             aliases = json.load(f)
 
-        self.regional_bank_url = aliases[self.department]["alias"]
+        self.regional_bank_url = aliases[str(self.department).zfill(2)]["alias"]
 
     def map_digit(self, key_layout, digit):
         """map digit with key layout"""
