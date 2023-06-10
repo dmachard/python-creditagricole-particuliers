@@ -21,10 +21,11 @@ class Authenticator:
         
     def find_regional_bank(self):
         """find regional bank"""
-        regional_bank = regionalbanks.RegionalBanks().by_departement(department=self.department)
-        if "regionalBankUrlPrefix" not in regional_bank:
-            raise Exception( "[error] regionalBankUrlPrefix key is missing" )
-        self.regional_bank_url = regional_bank["regionalBankUrlPrefix"][1:-1]
+
+        with open("aliases.json", "r") as f :
+            aliases = json.load(f)
+
+        self.regional_bank_url = aliases[self.department]["alias"]
 
     def map_digit(self, key_layout, digit):
         """map digit with key layout"""
