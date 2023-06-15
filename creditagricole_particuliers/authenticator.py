@@ -1,9 +1,9 @@
-
 from urllib import parse
 import requests
 import json
 
 from creditagricole_particuliers import regionalbanks
+
 
 class Authenticator:
     def __init__(self, username, password, department):
@@ -15,16 +15,25 @@ class Authenticator:
         self.department = department
         self.regional_bank_url = "ca-undefined"
         self.cookies = None
-        
+
         self.find_regional_bank()
         self.authenticate()
-        
-    def find_regional_bank(self):
+
+    def find_regional_bank(self, use_local=True):
         """find regional bank"""
-        regional_bank = regionalbanks.RegionalBanks().by_departement(department=self.department)
-        if "regionalBankUrlPrefix" not in regional_bank:
-            raise Exception( "[error] regionalBankUrlPrefix key is missing" )
-        self.regional_bank_url = regional_bank["regionalBankUrlPrefix"][1:-1]
+
+        if use_local:
+            with open("aliases.json", "r") as f:
+                aliases = json.load(f)
+
+            self.regional_bank_url = aliases[str(self.department).zfill(2)]["alias"]
+
+        else:
+            regional_bank = regionalbanks.RegionalBanks().by_departement(department=self.department)
+            if "regionalBankUrlPrefix" not in regional_bank:
+                raise Exception("[error] regionalBankUrlPrefix key is missing")
+
+            self.regional_bank_url = regional_bank["regionalBankUrlPrefix"][1:-1]
 
     def map_digit(self, key_layout, digit):
         """map digit with key layout"""
@@ -33,7 +42,7 @@ class Authenticator:
             if int(digit) == int(k):
                 return i
             i += 1
-            
+
     def authenticate(self):
         """authenticate user"""
         # get the keypad layout for the password
@@ -42,23 +51,22 @@ class Authenticator:
         r = requests.post(url=url,
                           verify=self.ssl_verify)
         if r.status_code != 200:
-            raise Exception( "[error] keypad: %s - %s" % (r.status_code, r.text) )
+            raise Exception("[error] keypad: %s - %s" % (r.status_code, r.text))
 
-        self.cookies = r.cookies 
+        self.cookies = r.cookies
         rsp = json.loads(r.text)
         self.keypadId = rsp["keypadId"]
-        
+
         # compute the password according to the layout
         j_password = []
         for d in self.password:
             k = self.map_digit(key_layout=rsp["keyLayout"], digit=d)
-            j_password.append( "%s" % k)
-
+            j_password.append("%s" % k)
 
         # authenticate the user
         url = "%s/%s/particulier/" % (self.url, self.regional_bank_url)
         url += "acceder-a-mes-comptes.html/j_security_check"
-        headers={'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+        headers = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
         payload = {'j_password': ",".join(j_password),
                    'path': '/content/npc/start',
                    'j_path_ressource': '%%2F%s%%2Fparticulier%%2Foperations%%2Fsynthese.html' % self.regional_bank_url,
@@ -66,12 +74,12 @@ class Authenticator:
                    'keypadId': rsp["keypadId"],
                    'j_validate': "true"}
         r2 = requests.post(url=url,
-                          data=parse.urlencode(payload),
-                          headers=headers,
-                          verify=self.ssl_verify,
-                          cookies = r.cookies)
+                           data=parse.urlencode(payload),
+                           headers=headers,
+                           verify=self.ssl_verify,
+                           cookies=r.cookies)
         if r2.status_code != 200:
-            raise Exception( "[error] securitycheck: %s - %s" % (r2.status_code, r2.text) )
+            raise Exception("[error] securitycheck: %s - %s" % (r2.status_code, r2.text))
 
         # success, extract cookies and save-it
         self.cookies = requests.cookies.merge_cookies(self.cookies, r2.cookies)
