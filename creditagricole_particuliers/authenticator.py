@@ -1,6 +1,7 @@
 from urllib import parse
 import requests
 import json
+import os
 
 from creditagricole_particuliers import regionalbanks
 
@@ -23,7 +24,8 @@ class Authenticator:
         """find regional bank"""
 
         if use_local:
-            with open("aliases.json", "r") as f:
+            filepath = os.path.join(os.getcwd(), "aliases.json")
+            with open(filepath, "r") as f:
                 aliases = json.load(f)
 
             self.regional_bank_url = aliases[str(self.department).zfill(2)]["alias"]
