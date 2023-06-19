@@ -24,7 +24,7 @@ class Authenticator:
         """find regional bank"""
 
         if use_local:
-            filepath = os.path.join(os.getcwd(), "aliases.json")
+            filepath = os.path.join(os.path.dirname(__file__), r"aliases.json")
             with open(filepath, "r") as f:
                 aliases = json.load(f)
 
