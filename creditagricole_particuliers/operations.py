@@ -100,7 +100,7 @@ class Operations:
             _ops.append(o.descr)
         return json.dumps(_ops)
 
-    def get_operations(self, count, startIndex=None):
+    def get_operations(self, count, startIndex=None, limit=30):
         """get operations according to the date range"""
         # convert date to timestamp
         ts_date_debut = datetime.strptime(self.date_start, "%Y-%m-%d")
@@ -111,7 +111,6 @@ class Operations:
 
         # limit operations to 30
         nextCount = 0
-        limit = 30
         if count > limit:
             nextCount = count - limit
         
@@ -137,5 +136,4 @@ class Operations:
             self.list_operations.append( Operation(op) )
 
         if nextCount > 0:
-            time.sleep(1)
             self.get_operations(nextCount, rsp["nextSetStartIndex"])
