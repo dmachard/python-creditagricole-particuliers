@@ -68,7 +68,7 @@ class DeferredOperations:
             self.list_operations.append( Operation(op) )
 
 class Operations:
-    def __init__(self, session, compteIdx, grandeFamilleCode, date_start, date_stop, count=100):
+    def __init__(self, session, compteIdx, grandeFamilleCode, date_start, date_stop, count=100, sleep=None):
         """operations class"""
         self.session = session
         self.compteIdx = compteIdx
@@ -77,7 +77,7 @@ class Operations:
         self.date_stop = date_stop
         self.list_operations = []
         
-        self.get_operations(count=count)
+        self.get_operations(count=count, sleep=sleep)
 
     def __iter__(self):
         """iter"""
@@ -100,7 +100,7 @@ class Operations:
             _ops.append(o.descr)
         return json.dumps(_ops)
 
-    def get_operations(self, count, startIndex=None, limit=30):
+    def get_operations(self, count, startIndex=None, limit=30, sleep=None):
         """get operations according to the date range"""
         # convert date to timestamp
         ts_date_debut = datetime.strptime(self.date_start, "%Y-%m-%d")
@@ -136,4 +136,6 @@ class Operations:
             self.list_operations.append( Operation(op) )
 
         if nextCount > 0:
+            if sleep is not None and (isinstance(sleep, int) or isinstance(sleep, float)):
+                time.sleep(sleep)
             self.get_operations(nextCount, rsp["nextSetStartIndex"])
