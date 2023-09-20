@@ -32,7 +32,7 @@ class Account:
                          grandeFamilleCode=self.grandeFamilleCode,
                          numeroCompte=self.numeroCompte)
 
-    def get_operations(self, date_start=None, date_stop=None, count=100):
+    def get_operations(self, date_start=None, date_stop=None, count=100, sleep=None):
         """get operations"""
         if date_stop is None:
             current_date = datetime.today()
@@ -44,7 +44,7 @@ class Account:
                                      compteIdx=self.compteIdx,
                                      grandeFamilleCode=self.grandeFamilleCode,
                                      date_start=date_start,
-                                     date_stop=date_stop, count=count)
+                                     date_stop=date_stop, count=count, sleep=sleep)
 
     def as_json(self):
         """return as json"""

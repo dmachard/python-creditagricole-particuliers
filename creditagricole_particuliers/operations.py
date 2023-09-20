@@ -1,6 +1,7 @@
 
 import requests
 import json
+import time
 from datetime import datetime
 
 class Operation:
@@ -67,7 +68,7 @@ class DeferredOperations:
             self.list_operations.append( Operation(op) )
 
 class Operations:
-    def __init__(self, session, compteIdx, grandeFamilleCode, date_start, date_stop, count=100):
+    def __init__(self, session, compteIdx, grandeFamilleCode, date_start, date_stop, count=100, sleep=None):
         """operations class"""
         self.session = session
         self.compteIdx = compteIdx
@@ -76,7 +77,7 @@ class Operations:
         self.date_stop = date_stop
         self.list_operations = []
         
-        self.get_operations(count=count)
+        self.get_operations(count=count, sleep=sleep)
 
     def __iter__(self):
         """iter"""
@@ -99,7 +100,7 @@ class Operations:
             _ops.append(o.descr)
         return json.dumps(_ops)
 
-    def get_operations(self, count):
+    def get_operations(self, count, startIndex=None, limit=30, sleep=None):
         """get operations according to the date range"""
         # convert date to timestamp
         ts_date_debut = datetime.strptime(self.date_start, "%Y-%m-%d")
@@ -107,15 +108,24 @@ class Operations:
         
         ts_date_fin = datetime.strptime(self.date_stop, "%Y-%m-%d")
         ts_date_fin = int(ts_date_fin.timestamp())*1000
+
+        # limit operations to 30
+        nextCount = 0
+        if count > limit:
+            nextCount = count - limit
         
         # call operations ressources
         url = "%s" % self.session.url
         url += "/%s/particulier/operations/synthese/detail-comptes/" % self.session.regional_bank_url
         url += "jcr:content.n3.operations.json?grandeFamilleCode=%s&compteIdx=%s" % (self.grandeFamilleCode, self.compteIdx)
         url += "&idDevise=EUR"
-        url += "&dateDebut=%s" % ts_date_debut
-        url += "&dateFin=%s" % ts_date_fin
-        url += "&count=%s" % count
+        if startIndex is not None:
+            url += "&startIndex=%s" % requests.utils.quote(startIndex)
+        else:
+            url += "&dateDebut=%s" % ts_date_debut
+            url += "&dateFin=%s" % ts_date_fin
+        url += "&count=%s" % limit
+        
         r = requests.get(url=url, verify=self.session.ssl_verify, cookies=self.session.cookies)
         if r.status_code != 200:
             raise Exception( "[error] get operations: %s - %s" % (r.status_code, r.text) )
@@ -124,3 +134,8 @@ class Operations:
         rsp = json.loads(r.text)
         for op in rsp["listeOperations"]:
             self.list_operations.append( Operation(op) )
+
+        if nextCount > 0:
+            if sleep is not None and (isinstance(sleep, int) or isinstance(sleep, float)):
+                time.sleep(sleep)
+            self.get_operations(nextCount, rsp["nextSetStartIndex"])
