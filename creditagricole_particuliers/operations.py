@@ -135,7 +135,7 @@ class Operations:
         for op in rsp["listeOperations"]:
             self.list_operations.append( Operation(op) )
 
-        if nextCount > 0:
+        if nextCount > 0 and 'nextSetStartIndex' in rsp:
             if sleep is not None and (isinstance(sleep, int) or isinstance(sleep, float)):
                 time.sleep(sleep)
             self.get_operations(nextCount, rsp["nextSetStartIndex"])
