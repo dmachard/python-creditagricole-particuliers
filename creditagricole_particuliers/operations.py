@@ -119,10 +119,10 @@ class Operations:
         url += "/%s/particulier/operations/synthese/detail-comptes/" % self.session.regional_bank_url
         url += "jcr:content.n3.operations.json?grandeFamilleCode=%s&compteIdx=%s" % (self.grandeFamilleCode, self.compteIdx)
         url += "&idDevise=EUR"
+        url += "&dateDebut=%s" % ts_date_debut
         if startIndex is not None:
             url += "&startIndex=%s" % requests.utils.quote(startIndex)
         else:
-            url += "&dateDebut=%s" % ts_date_debut
             url += "&dateFin=%s" % ts_date_fin
         url += "&count=%s" % limit
         
@@ -135,7 +135,7 @@ class Operations:
         for op in rsp["listeOperations"]:
             self.list_operations.append( Operation(op) )
 
-        if nextCount > 0 and 'nextSetStartIndex' in rsp:
+        if nextCount > 0 and 'nextSetStartIndex' in rsp and 'hasNext' in rsp and rsp['hasNext'] is True:
             if sleep is not None and (isinstance(sleep, int) or isinstance(sleep, float)):
                 time.sleep(sleep)
             self.get_operations(nextCount, rsp["nextSetStartIndex"])
