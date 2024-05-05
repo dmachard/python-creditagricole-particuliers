@@ -5,6 +5,9 @@
 Ce client Python est à destination des particuliers souhaitant récupérer ses opérations bancaires stockées par le Crédit Agricole.
 Ce client a été construit après analyse des requêtes web réalisé par l'application web https://www.credit-agricole.fr/.
 
+> Rappel 1: aucune garantie de fonctionnement sur la durée.
+> Rappel 2: aucun numéro de compte, mot de passe ne sont stockés par ce client!
+
 ## Installation
 
 ```python
